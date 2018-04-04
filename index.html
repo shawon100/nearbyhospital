@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Lab Project</title>
+	<meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="css/style.css">
+    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    <script src="js/vendor/jquery-1.12.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <title>Button Generator</title>
+    <style>
+    .ruet
+    {
+        background-color:#008040;
+        border-bottom: 6px solid #004f27;
+        height:50px;
+        width:100px;
+        color:#ffffff;
+        font-weight: bold;
+        font-size:18px;
+        text-align:center;
+        border-radius:5px;
+        padding:10px 20px 10px 20px;
+
+
+}
+.ruet:hover
+{
+
+   background-color: #008040;
+   border-bottom-width: 4px;
+
+
+}
+
+body{
+	color: blue;
+}
+a:link
+{
+  color:#ffffff;
+  text-decoration:none;
+
+}
+
+.ruet:active
+{
+    border-bottom-width:1px;
+    background-color: #00a653;
+
+
+}
+
+
+.sidebar
+{
+     max-width:390px;
+     height: auto;
+     border-top:1px solid black;
+     border-right: 1px solid black;
+     border-left:1px solid black;
+     border-bottom:5px solid blue;
+     float:left;
+     margin-top:20px;
+		 color:black;
+     padding:50px;
+     box-shadow: 2px 2px 2px 2px gray;
+
+
+
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(40,40,40);
+    box-shadow: 5px 5px 5px grey;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover, .offcanvas a:focus{
+    color: white;
+    background-color: #3F51B5;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    font-size: 30px;
+    margin-left: 50px;
+}
+
+
+
+.nav
+{
+   border-radius: 0px;
+   background-color: #3F51B5;
+   border:none;
+}
+
+  .foot
+  {
+          background-color: rgb(40,40,40);
+          padding: 20px;
+          color: white;
+          text-align: center;
+          clear: left;
+          max-width: 100%;
+          margin-top:500px;
+
+
+
+
+  }
+
+  .bh
+  {
+      font-size:30px;
+      cursor:pointer;
+      color: white;
+      margin-left: 20px;
+      padding:5px;
+
+  }
+  .ch
+  {
+     font-size: 25px;
+     margin-left:15px;
+  }
+  .bh:hover
+  {
+      background-color: black;
+  }
+
+  @media only screen and (max-width:400px)
+  {
+    .ch
+    {
+       font-size:20px;
+       margin-left:2px;
+    }
+  }
+
+	#map{
+			position: relative;
+			width: 100%;
+			padding-bottom: 56.25%; /* Ratio 16:9 ( 100%/16*9 = 56.25% ) */
+	 }
+	#map > *{
+			display: block;
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			width: 100%;
+	}
+
+	#map{
+		margin-bottom: 50px;
+		background: ;
+	}
+
+	#h
+	{
+			margin-top: 50px;
+	}
+
+</style>
+<script type="text/javascript">
+
+					var myLocation;
+					function initMap() {
+						if (navigator.geolocation) {
+
+								navigator.geolocation.getCurrentPosition(function(position) {
+									myLocation = {
+										lat: position.coords.latitude,
+										lng: position.coords.longitude
+									};
+									setPos(myLocation);
+									//document.getElementById('my').innerHTML=myLocation.lat+"<br>"+myLocation.lng;
+								});
+
+								setPos(myLocation);
+							}
+							else
+							{
+								 alert("Failed");
+							}
+					}
+
+					function setPos(myLocation) {
+						map = new google.maps.Map(document.getElementById('map'), {
+							center: myLocation,
+							zoom: 100
+						});
+
+						var service = new google.maps.places.PlacesService(map);
+						service.nearbySearch({
+							location: myLocation,
+							radius: 4000,
+							types: ['hospital']
+						}, processResults);
+
+					}
+
+					function processResults(results, status, pagination) {
+						if (status !== google.maps.places.PlacesServiceStatus.OK) {
+							return;
+						} else {
+							createMarkers(results);
+
+						}
+					}
+
+
+					function createMarkers(places) {
+						var hospitals="";
+						var dist;
+						var op;
+						var opn,st="Open";
+						var bounds = new google.maps.LatLngBounds();
+						var placesList = document.getElementById('places');
+
+						for (var i = 0, place; place = places[i]; i++) {
+								 console.log(places[i]);
+								 var lat1=myLocation.lat;
+									console.log(lat1);
+								 var lng1=myLocation.lng;
+									console.log(lng1);
+								 var lat2=places[i].geometry.location.lat();
+									console.log(lat2);
+								 var lng2=places[i].geometry.location.lng();
+								 console.log(lng2);
+
+								 dist=distance(lat1,lng1,lat2,lng2);
+								 op=places[i].opening_hours;
+								 if (typeof op !== 'undefined')
+								 {
+										opn=op.open_now;
+										if(opn)
+										{
+											 st="Open";
+										}
+										else
+										{
+											 st="Close";
+										}
+								 }
+
+
+								 console.log(opn);
+
+								 hospitals= hospitals+"<div class=\"col-sm-8\"><a href=\"show.html?id="+places[i].name+"&st="+st+"\">"+"<div class=\"sidebar\">"+places[i].name+"<br>"+"Location : "+places[i].geometry.location+"<br>"+"Full Address : "+places[i].vicinity+"<br>"+"Distance : "+dist+" km<br>"+"Rating : "+places[i].rating+"<br>Status : "+st+"</div></a></div><br><br>";
+							var image = {
+								url: place.icon,
+								size: new google.maps.Size(71, 71),
+								origin: new google.maps.Point(0, 0),
+								anchor: new google.maps.Point(17, 34),
+								scaledSize: new google.maps.Size(25, 25)
+							};
+
+							var marker = new google.maps.Marker({
+								map: map,
+								icon: image,
+								title: place.name,
+								animation: google.maps.Animation.DROP,
+								position: place.geometry.location
+							});
+
+							bounds.extend(place.geometry.location);
+						}
+
+						document.getElementById('h').innerHTML=hospitals;
+						console.log(hospitals);
+
+						map.fitBounds(bounds);
+					}
+
+					function distance(lon1, lat1, lon2, lat2) {
+								var R = 6371; // Radius of the earth in km
+								var dLat = (lat2-lat1).toRad();  // Javascript functions in radians
+								var dLon = (lon2-lon1).toRad();
+								var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+												Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) *
+												Math.sin(dLon/2) * Math.sin(dLon/2);
+								var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+								var d = (R * c).toFixed(2); // Distance in km
+
+								return d;
+					}
+
+					if (typeof(Number.prototype.toRad) === "undefined") {
+							Number.prototype.toRad = function() {
+								return this * Math.PI / 180;
+					}
+				 }
+
+
+</script>
+
+</head>
+<body>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuBzeYkYimIquGG5KkIcB6vFmtHMUzDFo&libraries=places&callback=initMap" async defer></script>
+
+         <nav class="navbar navbar-inverse nav">
+              <div class="container-fluid">
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+
+                  <span class="bh" onclick="openNav()">&#9776;</span>
+                  <span class="ch"><a style="color: white;" href="index.html">Nearby Hospitals</a></span>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                  <ul class="nav navbar-nav">
+                    <!--<li class="active"><a href="#">Home</a></li>
+                    <li><a href="#">Page 1</a></li>
+                    <li><a href="#">Page 2</a></li>
+                    <li><a href="#">Page 3</a></li>-->
+                  </ul>
+                  <ul class="nav navbar-nav navbar-right">
+                    <!--<li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>-->
+                  </ul>
+                </div>
+              </div>
+        </nav>
+
+
+
+
+            <div id="mySidenav" class="sidenav">
+              <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+              <a href="index.php">Restaurant</a>
+              <a href="address.php">Mosque</a>
+            </div>
+
+
+           <script>
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+            </script>
+
+
+        </header>
+
+
+
+
+
+    <section id="main" style="margin-top:100px;">
+
+      <div class="container">
+				<div class="row">
+ 				 <div class="col-md-2"></div>
+ 				 <div class="col-md-8">
+					 <div id="map"></div><br>
+				</div>
+				 <div class="col-md-2"></div>
+			 </div>
+			 <div class="row">
+				  <div class="col-md-2"></div>
+					<div class="col-md-8">
+             <div id="h"></div>
+					</div>
+						 <div class="col-md-2"></div>
+        </div>
+
+        </div>
+      </div>
+
+
+
+       </section>
+
+       <footer class="foot">
+            <center><p>Copyright &copy;2017<br>Developed By Ashadullah Shawon</p></center>
+        </footer>
+
+
+</body>
+
+</html>
